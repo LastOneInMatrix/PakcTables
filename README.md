@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# My test task for Welbex
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Tables with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
