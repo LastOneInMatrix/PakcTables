@@ -1,23 +1,26 @@
 import {AppRootStateType, CommonActionTypeForApp, InferActionType} from "./store";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
-import {authAPI} from "../API/AuthAPI/authAPI";
+import {authAPI} from "../api/auth-api/authAPI";
 
 
 const initialState = {
     status: "idle",
     isInitialized: false,
     error: null,
+    isWrongPath: false
 } as AppInitialStateType;
 
 export const appReducer =
     (state: InitialAppStateType = initialState, action: CommonActionTypeForApp): InitialAppStateType => {
         switch (action.type) {
-            case "TEST-PROJECT/ROOT/APP/SET-STATUS":
+            case "PET-PROJECT/ROOT/APP/SET-STATUS":
                 return {...state, status: action.status};
-            case "TEST-PROJECT/ROOT/APP/IS-INITIALIZED":
+            case "PET-PROJECT/ROOT/APP/IS-INITIALIZED":
                 return {...state, isInitialized: action.isInitialized};
-            case "TEST-PROJECT/ROOT/APP/SET-ERROR":
+            case "PET-PROJECT/ROOT/APP/SET-ERROR":
                 return {...state, error: action.error};
+            case "PET-PROJECT/ROOT/APP/IS-WRONG-PATH":
+                return {...state, isWrongPath: action.isWrongPath}
             default:
                 return state;
         }
@@ -26,12 +29,16 @@ export const appReducer =
 
 // actions
 export const actionsForApp = {
-    setAppStatus: (status: StatusType) => ({type: "TEST-PROJECT/ROOT/APP/SET-STATUS", status} as const),
-    setAppError: (error: string | null) => ({type: "TEST-PROJECT/ROOT/APP/SET-ERROR", error} as const),
+    setAppStatus: (status: StatusType) => ({type: "PET-PROJECT/ROOT/APP/SET-STATUS", status} as const),
+    setAppError: (error: string | null) => ({type: "PET-PROJECT/ROOT/APP/SET-ERROR", error} as const),
     setIsInitialized: (isInitialized: boolean) => ({
-        type: "TEST-PROJECT/ROOT/APP/IS-INITIALIZED",
+        type: "PET-PROJECT/ROOT/APP/IS-INITIALIZED",
         isInitialized
     } as const),
+    setIsWrongPath: (isWrongPath: boolean) => ({
+        type: "PET-PROJECT/ROOT/APP/IS-WRONG-PATH",
+        isWrongPath
+    } as const)
 };
 
 
@@ -40,15 +47,15 @@ export const initializeApp = (): ThunkType => async (dispatch: ThunkDispatchType
     try {
         await authAPI.me();
         dispatch(actionsForApp.setIsInitialized(true));
-        dispatch(actionsForApp.setAppStatus("succeeded"));
     } catch (e: any) {
         dispatch(actionsForApp.setIsInitialized(true));
         dispatch(actionsForApp.setAppStatus("failed"));
         const error = e.response.data.error === 'you are not authorized /ᐠ-ꞈ-ᐟ\\'
-            ? e.response.data.error
-            : (e.message + ', more details in the console')
+            ? null
+            : e.response.data.error
+                ? e.response.data.error
+                : (e.message + ', more details in the console');
         dispatch(actionsForApp.setAppError(error));
-        dispatch(actionsForApp.setAppStatus("failed"));
     }
 };
 
@@ -63,6 +70,6 @@ export type AppInitialStateType = {
     isWrongPath: boolean
 };
 export type StatusType = "idle" | "loading" | "succeeded" | "failed";
-export type ThunkType<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, CommonActionTypeForApp>;
+export type ThunkType = ThunkAction<void, AppRootStateType, unknown, CommonActionTypeForApp>;
 export type ThunkDispatchType = ThunkDispatch<AppRootStateType, unknown, CommonActionTypeForApp>;
 

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent} from "react";
-import s from "./InputField.module.scss";
+import s from "./SearchField.module.scss";
 
 type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
@@ -8,17 +8,15 @@ type InputFieldPropsType = DefaultInputPropsType & { // и + ещё пропсы
     onEnter?: () => void
     error?: string | null
     spanClassName?: string
-    label?: string
 }
 
 
-export const InputField: React.FC<InputFieldPropsType> =  (
+export const SearchField: React.FC<InputFieldPropsType> =  (
     {
         onChange, onChangeText,
         onKeyPress, onEnter,
         error,
         className, spanClassName,
-        label,
         ...restProps
     }
 ) => {
@@ -37,19 +35,16 @@ export const InputField: React.FC<InputFieldPropsType> =  (
     }
 
 
-    const finalSpanClassName = `${s.error} ${spanClassName ? spanClassName : ''}`
     const finalInputClassName = `${s.input} ${error && s.input__error}`
 
     return (
-        <div className={s.inputField}>
-            <label aria-required={true}>{label}</label>
+        <div className={s.searchField}>
             <input
                 onChange={onChangeCallback}
                 onKeyPress={onKeyPressCallback}
                 className={finalInputClassName}
                 {...restProps}
             />
-            <div className={s.inputField__error}>{error && <span className={finalSpanClassName}>{error}</span>}</div>
         </div>
     )
 }

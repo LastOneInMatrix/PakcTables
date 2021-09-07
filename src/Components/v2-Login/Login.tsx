@@ -1,16 +1,17 @@
-import React, {FocusEvent, FormEvent, useState} from "react";
+import React, {FocusEvent, FormEvent, useEffect, useState} from "react";
 import style from "./Login.module.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
 import {Redirect} from "react-router-dom";
-import {AppRootStateType} from "../../App/store";
-import {PATH} from "../../App/App";
+import {AppRootStateType} from "../../app/store";
+import {PATH} from "../../app/App";
 import {login} from "./loginReduser";
-import {StatusType} from "../../App/appReducer";
-import {AuthModal} from "../Common/StylizedСomponents/AuthModal/AuthModal";
-import {InputField} from "../Common/InputField/InputField";
-import {Button} from "../Common/Button/Button";
-import {Preloader} from "../Common/Preloader/Preloader";
+import {actionsForApp, StatusType} from "../../app/appReducer";
+import {AuthModal} from "../common/StylizedСomponents/AuthModal/AuthModal";
+import {InputField} from "../common/InputField/InputField";
+import {Button} from "../common/Button/Button";
+import {Error} from "../common/Error/Error";
+import {Preloader} from "../common/Preloader/Preloader";
 
 
 export const Login: React.FC = React.memo(() => {
@@ -30,6 +31,15 @@ export const Login: React.FC = React.memo(() => {
     const error = useSelector<AppRootStateType, string | null>(state => state.app.error);
     const dispatch: Dispatch<any> = useDispatch();
 
+    useEffect(() => {
+        const id = setTimeout(() => {
+            dispatch(actionsForApp.setAppError(""));
+        }, 5000);
+
+        return () => {
+            clearTimeout(id)
+        };
+    });
 
 
     const validate = (e: FocusEvent<HTMLInputElement>) => {
@@ -67,7 +77,7 @@ export const Login: React.FC = React.memo(() => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         dispatch(login(data));
-        e.preventDefault(); //что-бы не перезагружал страницу
+        e.preventDefault();
     };
 
     if (isLoggedIn) {
@@ -75,7 +85,7 @@ export const Login: React.FC = React.memo(() => {
     }
 
     return (
-        <AuthModal subtitle={'Sign In'} title={'TablesTest'}>
+        <AuthModal subtitle={'Sign In'}>
             {status === 'loading' && <Preloader/>}
             <form onSubmit={handleSubmit}>
                 <InputField
@@ -95,16 +105,19 @@ export const Login: React.FC = React.memo(() => {
                     onChange={e => setData({...data, password: e.target.value})}
                     error={errors.passwordValid ? errors.formErrors.password : null}
                 />
+
+
+                <Error errorMessage={error}/>
                 <div className={style.button_block}>
                     <Button
                         color='dark-blue'
                         rounded
-                        // type={"submit"}
+                        type={"submit"}
                         disabled={status === "loading"}
                     >Login</Button>
-                    <pre style={{textAlign: 'center'}}>{error}</pre>
                 </div>
             </form>
+
         </AuthModal>
     );
 })

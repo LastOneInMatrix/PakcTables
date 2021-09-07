@@ -1,0 +1,34 @@
+.searchField {
+  position: relative;
+  width: 100%;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    height: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.27);
+    transform: rotate(-45deg);
+  }
+
+  input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #635D80;
+    background: #ECECF9;
+    opacity: 0.5;
+    padding: 5px 40px;
+    font-size: 14px;
+    line-height: 24px;
+  }
+}

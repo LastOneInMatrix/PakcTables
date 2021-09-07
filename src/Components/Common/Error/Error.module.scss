@@ -1,0 +1,60 @@
+.error_block__visible {
+  position: relative;
+  width: 100%;
+  background: #F5E9E9;
+  border: 1px solid #E26F6F;
+  box-sizing: border-box;
+  border-radius: 8px;
+  height: 60px;
+  padding: 20px;
+  color: #EE6565;
+  font-size: 16px;
+  margin-bottom: 20px;
+  animation-name: moveInLeft;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+}
+
+.error_block__hidden {
+  position: relative;
+  visibility: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  height: 60px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.error_icon {
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  background: #FFC8C8;
+  border-radius: 50%;
+  margin-right: 15px;
+  font-size: 16px;
+  line-height: 22px;
+  color: #EE6565;
+}
+
+.error_message {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+
+  80% {
+    transform: translateX(1rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from "react-redux";
-import reportWebVitals from './reportWebVitals';
-import {store} from "./App/store";
 import './index.scss';
-import App from './App/App';
+import reportWebVitals from './reportWebVitals';
 import {HashRouter} from "react-router-dom";
-
+import {Provider} from "react-redux";
+import {store} from "./app/store";
+import App from "./app/App";
 
 ReactDOM.render(
     <Provider store={store}>
-        <HashRouter>
+        <HashRouter >
             <App/>
         </HashRouter>
     </Provider>
